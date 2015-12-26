@@ -19,7 +19,7 @@ function gmcp(what)
 		return nil
 	else
 		local luastmt = "ret = " .. value
-		assert (loadstring (luastmt or "")) ()
+				assert (loadstring (luastmt or "")) ()
 		return ret
 	end -- if
 end -- gmcp
@@ -37,7 +37,7 @@ function get_gmcp(fieldname, parent)
 
    local lastval = get_last_tag(fieldname)
 
-   for item in string.gmatch(fieldname,"%a+") do
+   for item in string.gmatch(fieldname,"[%a_]+") do
       if parent[item] ~= nil then
 
          if item == lastval then return parent[item] end
@@ -63,7 +63,7 @@ end -- function get_gmcp
 ---------------------------------------------------------------------------------------------------
 function get_last_tag(instr) 
 
-   return string.match(instr,"^.*%.(%a+)$") or instr
+   return string.match(instr,"^.*%.([%a_]+)$") or instr
 
 end -- get_last_tag
 
@@ -91,13 +91,15 @@ end
 ---------------------------------------------------------------------------------------------------
 function gmcpsection(fieldname,nesting) 
    local outval = get_gmcp(fieldname,gmcpdata)
- 
+
    if (type(outval) == "table") then 
+ 
       assert(nesting,"nested table value requested from GMCP. Should be single element.")
       return serialize.save_simple(outval) 
    end
 
    if type (outval) == "string" then
+ 
       return outval 
    else
       return tostring (outval)
